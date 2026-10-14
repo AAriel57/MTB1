@@ -254,7 +254,7 @@ footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-cont
       <p class="lede">Una sábana de vinilo dorado que convierte la cama en <em>el centro de la noche</em>.</p>
       <div class="row">
         <a class="btn" href="#medidas">Elegir medida</a>
-        <span class="price-note">Juego completo desde <strong>159 €</strong></span>
+        <span class="price-note">Juego completo <strong>219 €</strong></span>
       </div>
       <div class="meta">
         <span>Bajera ajustable</span>
@@ -353,7 +353,7 @@ footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-cont
           <li><span>Envío discreto en caja neutra</span><span>Incluido</span></li>
         </ul>
         <div class="buy">
-          <div class="total" id="total">169 €<small>IVA incl.</small></div>
+          <div class="total" id="total">219 €<small>IVA incl.</small></div>
           <button class="btn" type="button" id="add">Añadir a la cesta</button>
         </div>
       </div>
@@ -499,14 +499,15 @@ footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-cont
 
   /* ---------- Configurador ---------- */
   const SIZES = [
-    {w:135,l:190,p:159},{w:150,l:190,p:169},{w:150,l:200,p:175},
-    {w:160,l:200,p:185},{w:180,l:200,p:199},{w:200,l:200,p:219}
+    /* p:null = bajo pedido; solo la medida estándar tiene precio */
+    {w:135,l:190,p:null},{w:150,l:190,p:219},{w:150,l:200,p:null},
+    {w:160,l:200,p:null},{w:180,l:200,p:null},{w:200,l:200,p:null}
   ];
   const box = document.getElementById('sizes');
   SIZES.forEach((s,i)=>{
     const id='size-'+s.w+'x'+s.l;
     box.insertAdjacentHTML('beforeend',
-      `<label for="${id}"><input type="radio" name="size" id="${id}" value="${i}" ${i===1?'checked':''}><span>${s.w} × ${s.l}<small>${s.p} €</small></span></label>`);
+      `<label for="${id}"><input type="radio" name="size" id="${id}" value="${i}" ${i===1?'checked':''}><span>${s.w} × ${s.l}<small>${s.p ? s.p+' € · estándar' : 'Bajo pedido'}</small></span></label>`);
   });
   const $ = id => document.getElementById(id);
   const set = (el, a) => { for (const k in a) el.setAttribute(k, a[k]); };
@@ -521,15 +522,23 @@ footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-cont
     $('dim-l').setAttribute('d',`M${x-12} ${y}v${l}M${x-16} ${y}h8M${x-16} ${y+l}h8`);
     set($('lbl-l'),{x:x-20,y:y+l/2,transform:`rotate(-90 ${x-20} ${y+l/2})`}); $('lbl-l').textContent=s.l+' CM';
     $('inc-sheet').textContent=`${s.w} × ${s.l} × 30 cm`;
-    $('total').firstChild.nodeValue=s.p+' € ';
+    $('total').firstChild.nodeValue=s.p ? s.p+' € ' : 'Consultar ';
+    $('total').lastChild.hidden=!s.p;
+    $('add').textContent=s.p ? 'Añadir a la cesta' : 'Consultar precio';
   }
   let current=SIZES[1]; render(current);
   box.addEventListener('change', e=>{ current=SIZES[+e.target.value]; render(current); });
 
   let count=0, timer;
   $('add').addEventListener('click', ()=>{
+    const t=$('toast');
+    if (!current.p) {
+      t.textContent=`Lingote ${current.w} × ${current.l} se hace bajo pedido. Escríbenos y te pasamos precio y plazo.`;
+      t.classList.add('show'); clearTimeout(timer); timer=setTimeout(()=>t.classList.remove('show'),3600);
+      return;
+    }
     count++; $('bag').textContent=`Cesta (${count})`;
-    const t=$('toast'); t.textContent=`Lingote ${current.w} × ${current.l} añadido a la cesta.`;
+    t.textContent=`Lingote ${current.w} × ${current.l} añadido a la cesta.`;
     t.classList.add('show'); clearTimeout(timer); timer=setTimeout(()=>t.classList.remove('show'),2800);
   });
 })();
