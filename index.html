@@ -1,0 +1,536 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lingote Moarlovers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Albert+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap">
+<style>
+/* Layout: un mundo nocturno color vino; el oro solo aparece donde está la sábana. Hero de metal líquido, manifiesto, materia, configurador con plano de cama, ritual, cuidados, preguntas. */
+:root {
+  --night: #150a0e;      /* fondo, berenjena casi negra */
+  --wine: #2b1119;       /* superficies */
+  --wine-line: #4a2230;  /* filetes */
+  --gold: #d6aa4c;
+  --gold-pale: #f2dd9f;
+  --gold-deep: #7a4e14;
+  --skin: #efdfd0;       /* texto principal */
+  --muted: #b39a92;      /* texto secundario */
+
+  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-body: "Albert Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "DM Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --step--1: clamp(0.78rem, 0.75rem + 0.1vw, 0.84rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --step-1: clamp(1.3rem, 1.15rem + 0.6vw, 1.6rem);
+  --step-2: clamp(1.8rem, 1.4rem + 1.6vw, 2.8rem);
+  --step-3: clamp(2.6rem, 1.8rem + 3.4vw, 4.8rem);
+  --step-4: clamp(4.2rem, 2.4rem + 9vw, 11rem);
+
+  --gutter: clamp(16px, 5vw, 72px);
+  --sheen: linear-gradient(115deg, var(--gold-deep) 0%, var(--gold) 28%, var(--gold-pale) 46%, var(--gold) 60%, var(--gold-deep) 100%);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--night);
+  color: var(--skin);
+  font-family: var(--f-body);
+  font-size: var(--step-0);
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; line-height: 1.02; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 1px solid var(--gold-pale); outline-offset: 4px; }
+.wrap { padding-inline: var(--gutter); max-width: 1320px; margin-inline: auto; }
+.eyebrow {
+  font-family: var(--f-mono); font-size: var(--step--1); letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.gilt {
+  background: var(--sheen); background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: sheen 9s ease-in-out infinite alternate;
+}
+@keyframes sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+
+/* Cabecera */
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--night) 78%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--wine-line);
+}
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
+.brand { font-family: var(--f-display); font-style: italic; font-size: 1.35rem; letter-spacing: 0.01em; text-decoration: none; }
+.brand b { font-weight: 500; font-style: normal; }
+nav.links { display: flex; gap: 28px; font-size: var(--step--1); letter-spacing: 0.12em; text-transform: uppercase; }
+nav.links a { text-decoration: none; color: var(--muted); transition: color .3s; }
+nav.links a:hover { color: var(--gold-pale); }
+.bag { font-family: var(--f-mono); font-size: var(--step--1); color: var(--gold-pale); text-decoration: none; letter-spacing: .08em; }
+@media (max-width: 760px) { nav.links { display: none; } }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--wine-line); }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; display: block; }
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--night) 92%, transparent) 0%, color-mix(in srgb, var(--night) 55%, transparent) 46%, transparent 78%),
+    linear-gradient(0deg, var(--night) 0%, transparent 30%);
+}
+.hero .wrap { padding-block: clamp(88px, 14vw, 180px) clamp(56px, 8vw, 110px); display: grid; gap: 28px; }
+.hero h1 { font-size: var(--step-4); font-style: italic; letter-spacing: -0.03em; line-height: .86; margin-left: -0.04em; }
+.hero .lede { max-width: 30ch; font-family: var(--f-display); font-size: var(--step-1); line-height: 1.35; color: var(--skin); }
+.hero .lede em { color: var(--gold-pale); }
+.hero .row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin-top: 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 12px; cursor: pointer;
+  font-family: var(--f-body); font-size: var(--step--1); font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; text-decoration: none;
+  padding: 16px 28px; border: 1px solid var(--gold); color: var(--night);
+  background: var(--sheen); background-size: 220% 100%; background-position: 20% 50%;
+  transition: background-position .8s ease;
+}
+.btn:hover { background-position: 80% 50%; }
+.btn.ghost { background: transparent; color: var(--gold-pale); }
+.price-note { font-family: var(--f-mono); font-size: var(--step--1); color: var(--muted); letter-spacing: .06em; }
+.price-note strong { color: var(--skin); font-weight: 400; }
+.hero .meta {
+  display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 28px;
+  font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.hero .meta span::before { content: "◆ "; color: var(--gold); font-size: .6rem; vertical-align: 1px; }
+
+/* Manifiesto */
+.manifest .wrap { padding-block: clamp(80px, 12vw, 160px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: 40px; }
+.manifest h2 { font-size: var(--step-3); font-style: italic; }
+.manifest .body { display: grid; gap: 22px; max-width: 58ch; color: var(--muted); }
+.manifest .body p:first-child { font-family: var(--f-display); font-size: var(--step-1); line-height: 1.4; color: var(--skin); }
+@media (max-width: 820px) { .manifest .wrap { grid-template-columns: 1fr; } }
+
+/* Materia */
+.matter { background: var(--wine); border-block: 1px solid var(--wine-line); }
+.matter .wrap { padding-block: clamp(72px, 10vw, 130px); display: grid; gap: 56px; }
+.matter header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; }
+.matter h2 { font-size: var(--step-3); max-width: 14ch; }
+.matter header p { max-width: 38ch; color: var(--muted); }
+.traits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--wine-line); }
+.trait { padding: 28px 24px 8px 0; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.trait + .trait { padding-left: 24px; border-left: 1px solid var(--wine-line); }
+.trait .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.trait h3 { font-size: var(--step-1); font-style: italic; }
+.trait p { color: var(--muted); font-size: 0.95rem; }
+@media (max-width: 960px) {
+  .traits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trait:nth-child(3) { padding-left: 0; border-left: 0; }
+  .trait:nth-child(n+3) { border-top: 1px solid var(--wine-line); }
+}
+@media (max-width: 520px) {
+  .traits { grid-template-columns: 1fr; }
+  .trait + .trait { padding-left: 0; border-left: 0; border-top: 1px solid var(--wine-line); }
+}
+
+/* Configurador */
+.config .wrap { padding-block: clamp(80px, 12vw, 150px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.plan { position: relative; display: grid; place-items: center; }
+.plan svg { width: 100%; max-width: 440px; height: auto; overflow: visible; }
+.plan text { font-family: var(--f-mono); font-size: 9px; letter-spacing: .1em; fill: var(--muted); }
+.config h2 { font-size: var(--step-3); font-style: italic; }
+.config .copy { display: grid; gap: 28px; min-width: 0; }
+.config .copy > p { color: var(--muted); max-width: 46ch; }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 14px; }
+legend { padding: 0; margin-bottom: 14px; }
+.sizes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sizes label { position: relative; cursor: pointer; }
+.sizes input { position: absolute; opacity: 0; pointer-events: none; }
+.sizes span {
+  display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--wine-line);
+  font-family: var(--f-mono); font-size: 0.9rem; color: var(--skin); transition: border-color .25s, background .25s;
+  font-variant-numeric: tabular-nums;
+}
+.sizes span small { font-size: 0.7rem; color: var(--muted); letter-spacing: .06em; }
+.sizes label:hover span { border-color: var(--gold-deep); }
+.sizes input:checked + span { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, transparent); }
+.sizes input:focus-visible + span { outline: 1px solid var(--gold-pale); outline-offset: 3px; }
+@media (max-width: 440px) { .sizes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.includes { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--wine-line); }
+.includes li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--wine-line); font-size: 0.95rem; }
+.includes li span:last-child { font-family: var(--f-mono); font-size: 0.85rem; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.buy { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
+.total { font-family: var(--f-display); font-size: var(--step-2); font-variant-numeric: tabular-nums; }
+.total small { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: .1em; margin-left: 8px; }
+@media (max-width: 860px) { .config .wrap { grid-template-columns: 1fr; } .plan svg { max-width: 340px; } }
+
+/* Ritual */
+.ritual { border-top: 1px solid var(--wine-line); }
+.ritual .wrap { padding-block: clamp(80px, 12vw, 150px); display: grid; gap: 56px; }
+.ritual h2 { font-size: var(--step-3); max-width: 16ch; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.steps li::before {
+  content: counter(s, upper-roman); font-family: var(--f-display); font-style: italic; font-size: var(--step-2);
+  background: var(--sheen); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  line-height: 1;
+}
+.steps h3 { font-size: var(--step-1); }
+.steps p { color: var(--muted); font-size: 0.95rem; }
+.playlist {
+  justify-self: start; font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gold-pale); text-decoration: none; padding: 8px 12px; border: 1px solid var(--gold-deep); transition: border-color .25s, background .25s;
+}
+.playlist:hover { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, transparent); }
+@media (max-width: 900px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+/* Cuidados y preguntas */
+.care { background: var(--wine); border-block: 1px solid var(--wine-line); }
+.care .wrap { padding-block: clamp(72px, 10vw, 130px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: clamp(40px, 6vw, 96px); }
+.care h2 { font-size: var(--step-2); font-style: italic; margin-bottom: 28px; }
+.care-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.care-table th, .care-table td { text-align: left; padding: 13px 0; border-bottom: 1px solid var(--wine-line); vertical-align: top; }
+.care-table th { font-family: var(--f-mono); font-weight: 400; font-size: 0.72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); width: 38%; padding-right: 16px; }
+.care-table td { color: var(--muted); }
+details { border-bottom: 1px solid var(--wine-line); }
+details:first-of-type { border-top: 1px solid var(--wine-line); }
+summary {
+  cursor: pointer; list-style: none; padding: 20px 40px 20px 0; position: relative;
+  font-family: var(--f-display); font-size: var(--step-1); line-height: 1.25;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; position: absolute; right: 4px; top: 18px; font-family: var(--f-body); font-weight: 300; color: var(--gold); font-size: 1.4rem; transition: transform .3s; }
+details[open] summary::after { transform: rotate(45deg); }
+details p { padding: 0 0 22px; color: var(--muted); max-width: 60ch; }
+@media (max-width: 860px) { .care .wrap { grid-template-columns: 1fr; } }
+
+/* Cierre */
+.closing .wrap { padding-block: clamp(90px, 14vw, 180px); display: grid; gap: 28px; justify-items: start; }
+.closing h2 { font-size: var(--step-4); font-style: italic; letter-spacing: -0.03em; line-height: .9; }
+.closing p { max-width: 44ch; color: var(--muted); }
+footer { border-top: 1px solid var(--wine-line); }
+footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* Aviso */
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px);
+  background: var(--wine); border: 1px solid var(--gold); color: var(--skin);
+  padding: 14px 22px; font-size: 0.9rem; z-index: 40; opacity: 0; pointer-events: none;
+  transition: opacity .35s, transform .35s; max-width: calc(100vw - 32px);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .gilt { animation: none; }
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio"><b>Moar</b>lovers</a>
+    <nav class="links" aria-label="Principal">
+      <a href="#materia">Materia</a>
+      <a href="#medidas">Medidas</a>
+      <a href="#ritual">Ritual</a>
+      <a href="#cuidados">Cuidados</a>
+    </nav>
+    <a class="bag" href="#medidas" id="bag">Cesta (0)</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <canvas id="gold" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <span class="eyebrow">Moarlovers · Colección de cama · Hecho en España</span>
+      <h1 class="gilt">Lingote</h1>
+      <p class="lede">Una sábana de vinilo dorado que convierte la cama en <em>el centro de la noche</em>.</p>
+      <div class="row">
+        <a class="btn" href="#medidas">Elegir medida</a>
+        <span class="price-note">Juego completo desde <strong>159 €</strong></span>
+      </div>
+      <div class="meta">
+        <span>Bajera ajustable</span>
+        <span>Vinilo premium</span>
+        <span>Repelente al agua</span>
+        <span>2 fundas de almohada</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="manifest">
+    <div class="wrap">
+      <h2>La habitación cambia de idioma.</h2>
+      <div class="body">
+        <p>Bajas la luz y el dormitorio deja de ser un lugar para dormir. Lingote recoge cada reflejo de la lámpara y lo devuelve sobre la piel, como si la cama estuviera hecha de metal templado.</p>
+        <p>Al primer contacto el vinilo está fresco. En pocos minutos toma la temperatura del cuerpo y se vuelve otra cosa: liso, brillante, un poco atrevido. Lo que ocurra encima no deja huella en el colchón.</p>
+        <p>Lo diseñamos y lo fabricamos en España, en series cortas, para quien entiende el dormitorio como un escenario privado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="matter" id="materia">
+    <div class="wrap">
+      <header>
+        <h2>Oro que se toca, se moja y se limpia.</h2>
+        <p>Cuatro cualidades que separan a Lingote de una sábana corriente. Ninguna es decorativa.</p>
+      </header>
+      <div class="traits">
+        <article class="trait">
+          <span class="k">Superficie</span>
+          <h3>Vinilo premium</h3>
+          <p>Lámina flexible de acabado espejo, suave al tacto y sin olor. Brilla en dorado con la luz más tenue.</p>
+        </article>
+        <article class="trait">
+          <span class="k">Protección</span>
+          <h3>Repelente al agua</h3>
+          <p>Lubricantes a base de agua, cremas de masaje y cualquier líquido resbalan sobre la superficie. El colchón queda seco debajo.</p>
+        </article>
+        <article class="trait">
+          <span class="k">Ajuste</span>
+          <h3>Bajera con elástico</h3>
+          <p>Elástico en todo el perímetro para colchones de hasta 30 cm. Se queda tensa, sin arrugas ni desplazamientos.</p>
+        </article>
+        <article class="trait">
+          <span class="k">Origen</span>
+          <h3>Hecho en España</h3>
+          <p>Patronaje, corte y confección en nuestro taller. Cada juego se revisa a mano antes de salir.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="config" id="medidas">
+    <div class="wrap">
+      <div class="plan">
+        <svg id="plan" viewBox="0 0 320 340" role="img" aria-labelledby="plan-t">
+          <title id="plan-t">Plano de la cama con la sábana Lingote y dos fundas de almohada</title>
+          <defs>
+            <linearGradient id="g-sheet" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7a4e14"/>
+              <stop offset=".3" stop-color="#d6aa4c"/>
+              <stop offset=".48" stop-color="#f2dd9f"/>
+              <stop offset=".62" stop-color="#c8963a"/>
+              <stop offset="1" stop-color="#5e3a0e"/>
+            </linearGradient>
+            <linearGradient id="g-pillow" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f2dd9f"/>
+              <stop offset=".5" stop-color="#d6aa4c"/>
+              <stop offset="1" stop-color="#8a5a1a"/>
+            </linearGradient>
+          </defs>
+          <g id="bed">
+            <rect id="sheet" rx="6" fill="url(#g-sheet)"/>
+            <rect id="p1" rx="10" fill="url(#g-pillow)" stroke="#5e3a0e" stroke-opacity=".5"/>
+            <rect id="p2" rx="10" fill="url(#g-pillow)" stroke="#5e3a0e" stroke-opacity=".5"/>
+          </g>
+          <g stroke="#b39a92" stroke-width=".6" fill="none">
+            <path id="dim-w"/>
+            <path id="dim-l"/>
+          </g>
+          <text id="lbl-w" text-anchor="middle"></text>
+          <text id="lbl-l" text-anchor="middle"></text>
+        </svg>
+      </div>
+      <div class="copy">
+        <span class="eyebrow">El juego</span>
+        <h2>Elige tu medida</h2>
+        <p>Cada juego incluye la sábana bajera ajustable y dos fundas de almohada del mismo vinilo dorado. El plano se ajusta a la cama que elijas.</p>
+        <fieldset>
+          <legend class="eyebrow">Medida del colchón (cm)</legend>
+          <div class="sizes" id="sizes"></div>
+        </fieldset>
+        <ul class="includes">
+          <li><span>Sábana bajera Lingote</span><span id="inc-sheet">150 × 190 × 30</span></li>
+          <li><span>2 fundas de almohada</span><span>50 × 75 cm</span></li>
+          <li><span>Envío discreto en caja neutra</span><span>Incluido</span></li>
+        </ul>
+        <div class="buy">
+          <div class="total" id="total">169 €<small>IVA incl.</small></div>
+          <button class="btn" type="button" id="add">Añadir a la cesta</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ritual" id="ritual">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Ritual de la noche</span>
+        <h2>Cómo preparar la escena</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Tensa el oro</h3><p>Coloca la bajera esquina a esquina. El elástico la deja lisa como una lámina de metal.</p></li>
+        <li><h3>Baja la luz</h3><p>Una lámpara cálida a un lado de la cama. El vinilo multiplica cada punto de luz.</p></li>
+        <li><h3>Pon música</h3><p>Una playlist lenta, a volumen bajo, termina de crear la atmósfera. Te proponemos la nuestra.</p><a class="playlist" href="https://open.spotify.com/playlist/3hyY0iAzMijdZRMKZ1X6QD" target="_blank" rel="noopener">Lingote Music · Deep House Chill <span aria-hidden="true">↗</span></a></li>
+        <li><h3>Sin miedo a nada</h3><p>Lubricantes a base de agua, cremas de masaje o champán. Todo se queda en la superficie. Al terminar, se recoge con una microfibra y la sábana se dobla y se guarda.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="care" id="cuidados">
+    <div class="wrap">
+      <div>
+        <h2>Cuidados</h2>
+        <table class="care-table">
+          <tbody>
+            <tr><th scope="row">Tras cada uso</th><td>Recoger los líquidos con una microfibra, doblar y guardar.</td></tr>
+            <tr><th scope="row">Lavado</th><td>Ciclo corto con agua fría.</td></tr>
+            <tr><th scope="row">Acondicionador</th><td>No usar acondicionador.</td></tr>
+            <tr><th scope="row">Plancha</th><td>No planchar.</td></tr>
+            <tr><th scope="row">Secado</th><td>A la sombra.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2>Preguntas</h2>
+        <details>
+          <summary>¿Da calor dormir sobre vinilo?</summary>
+          <p>No. El vinilo de alta calidad de Lingote no aumenta la temperatura corporal. Al primer contacto está fresco y enseguida se adapta a la piel.</p>
+        </details>
+        <details>
+          <summary>¿Hace ruido al moverse?</summary>
+          <p>Muy poco. El vinilo premium es más blando y flexible que un plástico corriente, y la bajera tensa evita el roce de los pliegues.</p>
+        </details>
+        <details>
+          <summary>¿Cómo llega el pedido?</summary>
+          <p>En una caja neutra, sin logotipos ni descripción del contenido. En el remitente solo aparecen unas iniciales.</p>
+        </details>
+        <details>
+          <summary>¿Sirve para colchones muy altos?</summary>
+          <p>La bajera se ajusta a colchones de hasta 30 cm de alto, topper incluido. Para otras medidas, escríbenos y te la hacemos a medida en el taller.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <span class="eyebrow">Moarlovers</span>
+      <h2 class="gilt">Esta noche, en oro.</h2>
+      <p>Lingote se fabrica en series cortas. Cuando una tirada se agota, la siguiente tarda unas semanas en salir del taller.</p>
+      <a class="btn" href="#medidas">Reservar mi juego</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Moarlovers · Diseñado y fabricado en España</span>
+    <span>Producto para adultos +18</span>
+    <span>Envío discreto 48/72 h</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  /* ---------- Hero: lámina de oro líquido ---------- */
+  const cv = document.getElementById('gold');
+  const ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stops = [[0,[38,18,6]],[.18,[110,68,18]],[.36,[200,150,60]],[.5,[255,240,190]],[.62,[214,170,76]],[.8,[122,78,20]],[1,[38,18,6]]];
+  const ramp = new Uint8ClampedArray(256*3);
+  for (let i=0;i<256;i++){
+    const t=i/255; let k=0; while (k<stops.length-2 && t>stops[k+1][0]) k++;
+    const [a,ca]=stops[k],[b,cb]=stops[k+1], f=(t-a)/(b-a);
+    for (let c=0;c<3;c++) ramp[i*3+c]=ca[c]+(cb[c]-ca[c])*f;
+  }
+  let W=0,H=0,img,hbuf;
+  const off = document.createElement('canvas'), octx = off.getContext('2d');
+  const pointer = {x:.72,y:.45,tx:.72,ty:.45};
+  function size(){
+    const r = cv.getBoundingClientRect();
+    cv.width = Math.round(r.width); cv.height = Math.round(r.height);
+    W = Math.max(80, Math.round(r.width/4)); H = Math.max(60, Math.round(r.height/4));
+    off.width=W; off.height=H; img=octx.createImageData(W,H); hbuf=new Float32Array(W*H);
+  }
+  function frame(t){
+    t = t/1000;
+    pointer.x += (pointer.tx-pointer.x)*.04; pointer.y += (pointer.ty-pointer.y)*.04;
+    const asp = W/H;
+    for (let j=0;j<H;j++){
+      const y=j/H*3;
+      for (let i=0;i<W;i++){
+        const x=i/W*3*asp;
+        const dx=i/W-pointer.x, dy=(j/H-pointer.y)/asp;
+        const d2=dx*dx+dy*dy;
+        hbuf[j*W+i]= .55*Math.sin(x*1.25+y*.45+t*.28)
+          + .32*Math.sin(x*2.6-y*1.15+t*.42)
+          + .16*Math.sin((x+y)*4.3-t*.6)
+          + .10*Math.sin(x*7.1+y*2.3+t*.9)
+          - .9*Math.exp(-d2*28);
+      }
+    }
+    const data=img.data;
+    for (let j=0;j<H;j++){
+      for (let i=0;i<W;i++){
+        const p=j*W+i;
+        const gx=hbuf[p+(i<W-1?1:0)]-hbuf[p-(i>0?1:0)];
+        const gy=hbuf[p+(j<H-1?W:0)]-hbuf[p-(j>0?W:0)];
+        const nx=gx*6, ny=gy*6;
+        let v=.5+nx*.38+ny*.55+hbuf[p]*.12;
+        v=v-Math.floor(v);
+        const spec=Math.max(0,1-Math.hypot(nx+.35,ny+.5)*1.6);
+        const s=spec*spec*spec*170;
+        const k=(v*255)|0, o=p*4;
+        data[o]=ramp[k*3]+s; data[o+1]=ramp[k*3+1]+s*.92; data[o+2]=ramp[k*3+2]+s*.6; data[o+3]=255;
+      }
+    }
+    octx.putImageData(img,0,0);
+    ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+    ctx.drawImage(off,0,0,cv.width,cv.height);
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  size(); addEventListener('resize', ()=>{ size(); if (reduce) frame(0); });
+  cv.parentElement.addEventListener('pointermove', e=>{
+    const r=cv.getBoundingClientRect();
+    pointer.tx=(e.clientX-r.left)/r.width; pointer.ty=(e.clientY-r.top)/r.height;
+  });
+  requestAnimationFrame(frame);
+
+  /* ---------- Configurador ---------- */
+  const SIZES = [
+    {w:135,l:190,p:159},{w:150,l:190,p:169},{w:150,l:200,p:175},
+    {w:160,l:200,p:185},{w:180,l:200,p:199},{w:200,l:200,p:219}
+  ];
+  const box = document.getElementById('sizes');
+  SIZES.forEach((s,i)=>{
+    const id='size-'+s.w+'x'+s.l;
+    box.insertAdjacentHTML('beforeend',
+      `<label for="${id}"><input type="radio" name="size" id="${id}" value="${i}" ${i===1?'checked':''}><span>${s.w} × ${s.l}<small>${s.p} €</small></span></label>`);
+  });
+  const $ = id => document.getElementById(id);
+  const set = (el, a) => { for (const k in a) el.setAttribute(k, a[k]); };
+  function render(s){
+    const sc=1.3, w=s.w*sc, l=s.l*sc, x=(320-w)/2+8, y=20;
+    set($('sheet'),{x,y,width:w,height:l});
+    const pw=Math.min(75*sc,(w-3*8)/2), ph=50*sc*.8;
+    set($('p1'),{x:x+8,y:y+10,width:pw,height:ph});
+    set($('p2'),{x:x+w-8-pw,y:y+10,width:pw,height:ph});
+    $('dim-w').setAttribute('d',`M${x} ${y+l+12}h${w}M${x} ${y+l+8}v8M${x+w} ${y+l+8}v8`);
+    set($('lbl-w'),{x:x+w/2,y:y+l+26}); $('lbl-w').textContent=s.w+' CM';
+    $('dim-l').setAttribute('d',`M${x-12} ${y}v${l}M${x-16} ${y}h8M${x-16} ${y+l}h8`);
+    set($('lbl-l'),{x:x-20,y:y+l/2,transform:`rotate(-90 ${x-20} ${y+l/2})`}); $('lbl-l').textContent=s.l+' CM';
+    $('inc-sheet').textContent=`${s.w} × ${s.l} × 30 cm`;
+    $('total').firstChild.nodeValue=s.p+' € ';
+  }
+  let current=SIZES[1]; render(current);
+  box.addEventListener('change', e=>{ current=SIZES[+e.target.value]; render(current); });
+
+  let count=0, timer;
+  $('add').addEventListener('click', ()=>{
+    count++; $('bag').textContent=`Cesta (${count})`;
+    const t=$('toast'); t.textContent=`Lingote ${current.w} × ${current.l} añadido a la cesta.`;
+    t.classList.add('show'); clearTimeout(timer); timer=setTimeout(()=>t.classList.remove('show'),2800);
+  });
+})();
+</script>
