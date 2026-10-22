@@ -250,6 +250,34 @@ dialog.auth:not([data-state="in"]) .signed { display: none; }
 dialog.auth .signed p { margin: 0 0 20px; color: var(--muted); }
 dialog.auth .signed strong { color: var(--skin); font-weight: 400; }
 
+/* Chat (asistente con Claude vía Supabase Edge Function) */
+.chat-fab {
+  position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30;
+  font-family: var(--f-mono); font-size: var(--step--1); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--night); background: var(--sheen); background-size: 220% 100%; border: 1px solid var(--gold);
+  padding: 14px 20px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+.chat {
+  position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 35;
+  width: min(380px, calc(100vw - 32px)); height: min(560px, calc(100dvh - 32px));
+  display: flex; flex-direction: column; background: var(--wine); border: 1px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,.55);
+}
+.chat[hidden] { display: none; }
+.chat-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--wine-line); }
+.chat-head strong { font-family: var(--f-display); font-weight: 400; font-size: 1.25rem; }
+.chat-head button { background: none; border: 0; color: var(--muted); font-size: 1.4rem; cursor: pointer; }
+.chat-log { flex: 1; overflow-y: auto; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.chat-msg { max-width: 85%; padding: 10px 14px; font-size: .95rem; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-msg.bot { align-self: flex-start; background: var(--night); border: 1px solid var(--wine-line); }
+.chat-msg.me { align-self: flex-end; background: color-mix(in srgb, var(--gold) 18%, var(--wine)); border: 1px solid var(--gold-deep); }
+.chat-msg.wait { color: var(--muted); font-style: italic; }
+.chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--wine-line); }
+.chat-form input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; color: var(--skin); background: var(--night); border: 1px solid var(--wine-line); padding: 10px 12px; }
+.chat-form input:focus { border-color: var(--gold); outline: none; }
+.chat-form button { font-family: var(--f-mono); font-size: var(--step--1); letter-spacing: .08em; text-transform: uppercase; color: var(--night); background: var(--gold); border: 0; padding: 0 14px; cursor: pointer; }
+.chat-form button:disabled { opacity: .5; cursor: default; }
+.chat-note { font-size: .72rem; color: var(--muted); padding: 0 14px 10px; margin: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   .gilt { animation: none; }
   html { scroll-behavior: auto; }
@@ -478,13 +506,28 @@ dialog.auth .signed strong { color: var(--skin); font-weight: 400; }
   </div>
 </dialog>
 
+<button class="chat-fab" type="button" id="chat-open" aria-controls="chat" aria-expanded="false">Pregúntanos</button>
+<section class="chat" id="chat" aria-label="Asistente de Moarlovers" hidden>
+  <div class="chat-head">
+    <strong>Asistente Lingote</strong>
+    <button type="button" id="chat-close" aria-label="Cerrar chat">×</button>
+  </div>
+  <div class="chat-log" id="chat-log" role="log" aria-live="polite"></div>
+  <form class="chat-form" id="chat-form">
+    <input id="chat-input" type="text" maxlength="1500" autocomplete="off" placeholder="Escribe tu pregunta…" aria-label="Tu pregunta" required>
+    <button type="submit" id="chat-send">Enviar</button>
+  </form>
+  <p class="chat-note">Respuestas generadas por IA; pueden contener errores.</p>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
+/* La anon key es pública por diseño; la seguridad de los datos depende de las políticas RLS. */
+const SUPABASE_URL = 'https://iimuqzzcljbfwvthmnjt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbXVxenpjbGpiZnd2dGhtbmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2Mzk2OTgsImV4cCI6MjEwODIxNTY5OH0.Eewm15W25mtyOovFJksHoqjkRjbLwhBF5xYEl9oR0ZE';
+
 /* ---------- Cuenta: Supabase Auth ---------- */
 (() => {
-  /* La anon key es pública por diseño; la seguridad de los datos depende de las políticas RLS. */
-  const SUPABASE_URL = 'https://iimuqzzcljbfwvthmnjt.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbXVxenpjbGpiZnd2dGhtbmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2Mzk2OTgsImV4cCI6MjEwODIxNTY5OH0.Eewm15W25mtyOovFJksHoqjkRjbLwhBF5xYEl9oR0ZE';
   const $ = id => document.getElementById(id);
   const dlg = $('auth'), form = $('auth-form'), msg = $('auth-msg'), btn = $('account');
   if (!window.supabase) { btn.hidden = true; return; }
@@ -516,6 +559,55 @@ dialog.auth .signed strong { color: var(--skin); font-weight: 400; }
   });
 
   $('auth-out').addEventListener('click', () => sb.auth.signOut());
+})();
+
+/* ---------- Chat: asistente con Claude (Supabase Edge Function "chat") ---------- */
+(() => {
+  const $ = id => document.getElementById(id);
+  const box = $('chat'), log = $('chat-log'), form = $('chat-form'), input = $('chat-input'), send = $('chat-send'), fab = $('chat-open');
+  const history = [];
+  const GREETING = 'Hola, soy el asistente de Moarlovers. ¿Tienes dudas sobre Lingote, las medidas, el envío o los cuidados?';
+
+  function add(text, who){
+    const el = document.createElement('div');
+    el.className = 'chat-msg ' + who;
+    el.textContent = text;
+    log.append(el); log.scrollTop = log.scrollHeight;
+    return el;
+  }
+  function toggle(open){
+    box.hidden = !open; fab.hidden = open; fab.setAttribute('aria-expanded', open);
+    if (open) { if (!log.children.length) add(GREETING, 'bot'); input.focus(); } else fab.focus();
+  }
+  fab.addEventListener('click', () => toggle(true));
+  $('chat-close').addEventListener('click', () => toggle(false));
+  box.addEventListener('keydown', e => { if (e.key === 'Escape') toggle(false); });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = ''; send.disabled = true;
+    add(text, 'me'); history.push({role: 'user', content: text});
+    const wait = add('Escribiendo…', 'bot wait');
+    let reply;
+    try {
+      const res = await fetch(SUPABASE_URL + '/functions/v1/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY},
+        body: JSON.stringify({messages: history})
+      });
+      const data = await res.json().catch(() => ({}));
+      reply = data.reply || data.error || 'El asistente no está disponible ahora mismo.';
+      if (data.reply) history.push({role: 'assistant', content: data.reply});
+      else history.pop();
+    } catch {
+      reply = 'No hay conexión con el asistente. Inténtalo de nuevo en un momento.';
+      history.pop();
+    }
+    wait.remove(); add(reply, 'bot');
+    send.disabled = false; input.focus();
+  });
 })();
 </script>
 
